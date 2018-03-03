@@ -1,6 +1,5 @@
 #include "player.hpp"
 
-// This player Tide pods Dawn
 /*
  * Constructor for the player; initialize everything here. The side your AI is
  * on (BLACK or WHITE) is passed in as "side". The constructor must finish
@@ -23,7 +22,6 @@ Player::Player(Side side) {
 Player::~Player() {
 }
 
-//Test comment - Tynesha
 /*
  * Compute the next move given the opponent's last move. Your AI is
  * expected to keep track of the board on its own. If this is the first move,
