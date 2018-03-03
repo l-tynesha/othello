@@ -179,6 +179,18 @@ void Board::setBoard(char data[]) {
     }
 }
 
+bool Board::isCorner(Move *m)
+{
+	if(m->getX() == 0 && m->getY() == 0)
+		return true;
+	else if(m->getX() == 0 && m->getY() == 7)
+		return true;
+	else if(m->getX() == 7 && m->getY() == 0)
+		return true;
+	else if(m->getX() == 7 && m->getY() == 7)
+		return true;
+	return false;
+
 /*
  * Checks for edges
  */
