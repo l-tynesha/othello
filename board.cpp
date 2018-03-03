@@ -190,4 +190,15 @@ bool Board::isCorner(Move *m)
 	else if(m->getX() == 7 && m->getY() == 7)
 		return true;
 	return false;
+
+/*
+ * Checks for edges
+ */
+bool Board::isEdge(Move *m)
+{
+    if (m->getX == 0 || m->getX == 7 || m->getY == 0 || m->getY == 7)
+    {
+         return true;
+    }
+    retun false;
 }

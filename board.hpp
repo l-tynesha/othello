@@ -25,6 +25,7 @@ public:
     bool hasMoves(Side side);
     bool checkMove(Move *m, Side side);
     bool isCorner(Move *m);
+    bool isEdge(Move *m);
     void doMove(Move *m, Side side);
     int count(Side side);
     int countBlack();
