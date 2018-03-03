@@ -196,9 +196,9 @@ bool Board::isCorner(Move *m)
  */
 bool Board::isEdge(Move *m)
 {
-    if (m->getX == 0 || m->getX == 7 || m->getY == 0 || m->getY == 7)
+    if (m->getX() == 0 || m->getX() == 7 || m->getY() == 0 || m->getY() == 7)
     {
          return true;
     }
-    retun false;
+    return false;
 }
