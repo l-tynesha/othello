@@ -1,5 +1,4 @@
 #include "player.hpp"
-
 /*
  * Constructor for the player; initialize everything here. The side your AI is
  * on (BLACK or WHITE) is passed in as "side". The constructor must finish
@@ -8,14 +7,11 @@
 Player::Player(Side side) {
     // Will be set to true in test_minimax.cpp.
     testingMinimax = false;
+    pl_side = side;
     if (side == BLACK)
-    {
         op_side = WHITE;
-    }
     else 
-    {
         op_side = BLACK;
-    }
 
     /*
      * TODO: Do any initialization you need to do here (setting up the board,
@@ -49,7 +45,24 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
      * TODO: Implement how moves your AI should play here. You should first
      * process the opponent's opponents move before calculating your own move
      */
-    board.doMove(opponentsMove, op_side);
-    
-    return nullptr;
+    if(opponentsMove != nullptr)
+		board.doMove(opponentsMove, op_side);
+    vector<Move*> legal_moves;
+    for(int x = 0; x < 8; x++)
+    {
+		for(int y = 0; y < 8; y++)
+		{
+			Move* m = new Move(x, y);
+			if(board.checkMove(m, pl_side))
+				legal_moves.push_back(m);
+		}
+	}
+	
+	if(legal_moves.size() > 0)
+	{
+		board.doMove(legal_moves[0], pl_side);
+		return legal_moves[0];
+	}
+	else
+		return nullptr;
 }
