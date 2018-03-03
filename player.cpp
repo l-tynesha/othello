@@ -53,10 +53,55 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
 		{
 			Move* m = new Move(x, y);
 			if(board.checkMove(m, pl_side))
+			{
 				legal_moves.push_back(m);
+				if(board.isCorner(m))
+				{
+					board.doMove(m, pl_side);
+					return m;
+				}
+			}
 		}
 	}
 	
+	if(legal_moves.size() > 0)
+	{
+		Move* bestmove = nullptr;
+		int max_moves = -1;
+		for(int i = 0; i < legal_moves.size(); i++)
+		{
+			Board *copy = board.copy();
+			copy->doMove(legal_moves[i], pl_side);
+			int pl_moves = 0;
+			for(int x = 0; x < 8; x++)
+			{
+				for(int y = 0; y < 8; y++)
+				{
+					Move* m = new Move(x, y);
+					if(board.checkMove(m, pl_side))
+						pl_moves++;
+				}
+			}
+			if(pl_moves > max_moves)
+			{
+				max_moves = pl_moves;
+				bestmove = legal_moves[i];
+			}
+			delete copy;
+		}
+			
+		if(bestmove != nullptr)
+		{
+			board.doMove(bestmove, pl_side);
+			return bestmove;
+		}
+		else
+			return nullptr;
+	}
+	else
+		return nullptr;
+
+	/*
 	if(legal_moves.size() > 0)
 	{
 		board.doMove(legal_moves[0], pl_side);
@@ -64,4 +109,5 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
 	}
 	else
 		return nullptr;
+	*/
 }
