@@ -79,8 +79,14 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
 				for(int y = 0; y < 8; y++)
 				{
 					Move* m = new Move(x, y);
-					if(board.checkMove(m, pl_side))
+					if(copy->checkMove(m, pl_side))
+					{
 						pl_moves++;
+						if(board.isCorner(m))
+							pl_moves += 10;
+						else if(board.isEdge(m))
+							pl_moves += 2;
+					}
 				}
 			}
 			if(pl_moves > max_moves)

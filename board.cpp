@@ -204,6 +204,7 @@ bool Board::isEdge(Move *m)
          return true;
     }
     return false;
+<<<<<<< HEAD
 }
 
 /*
