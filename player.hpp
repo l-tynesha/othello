@@ -2,6 +2,7 @@
 #define __PLAYER_H__
 
 #include <iostream>
+#include <vector>
 #include "common.hpp"
 #include "board.hpp"
 using namespace std;
@@ -10,7 +11,7 @@ class Player {
 private:
     Board board;
     Side op_side;
-
+	Side pl_side;
 public:
     Player(Side side);
     ~Player();
