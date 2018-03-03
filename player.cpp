@@ -86,6 +86,8 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
 							pl_moves += 10;
 						else if(board.isEdge(m))
 							pl_moves += 2;
+						else if(board.isAdToCorner(m))
+							pl_moves -= 7;
 					}
 				}
 			}
