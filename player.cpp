@@ -26,7 +26,6 @@ Player::Player(Side side) {
 Player::~Player() {
 }
 
-//Test comment - Tynesha
 /*
  * Compute the next move given the opponent's last move. Your AI is
  * expected to keep track of the board on its own. If this is the first move,
@@ -109,14 +108,4 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
 	}
 	else
 		return nullptr;
-
-	/*
-	if(legal_moves.size() > 0)
-	{
-		board.doMove(legal_moves[0], pl_side);
-		return legal_moves[0];
-	}
-	else
-		return nullptr;
-	*/
 }
