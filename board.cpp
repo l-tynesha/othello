@@ -178,3 +178,15 @@ void Board::setBoard(char data[]) {
         }
     }
 }
+
+/*
+ * Checks for edges
+ */
+bool isEdge(Move *m)
+{
+    if (m->getX == 0 || m->getX == 7 || m->getY == 0 || m->getY == 7)
+    {
+         return true;
+    }
+    retun false;
+}
