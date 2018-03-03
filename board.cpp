@@ -215,17 +215,25 @@ bool Board::isAdToCorner(Move *m)
 		{return true;}
 	else if(m->getX() == 1 && m->getY() == 0)
 		{return true;}
+	else if(m->getX() == 1 && m->getY() == 1)
+		{return true;}
 	else if(m->getX() == 6 && m->getY() == 0)
 		{return true;}
 	else if(m->getX() == 7 && m->getY() == 1)
+		{return true;}
+	else if(m->getX() == 6 && m->getY() == 1)
 		{return true;}
 	else if(m->getX() == 0 && m->getY() == 6)
 		{return true;}
 	else if(m->getX() == 1 && m->getY() == 7)
 		{return true;}
+	else if(m->getX() == 1 && m->getY() == 6)
+		{return true;}
 	else if(m->getX() == 7 && m->getY() == 6)
 		{return true;}
 	else if(m->getX() == 6 && m->getY() == 7)
+		{return true;}
+	else if(m->getX() == 6 && m->getY() == 6)
 		{return true;}
 	return false;   
 }

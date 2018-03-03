@@ -69,7 +69,7 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
 	{
 		Move* bestmove = nullptr;
 		int max_moves = -1;
-		for(int i = 0; i < legal_moves.size(); i++)
+		for(unsigned int i = 0; i < legal_moves.size(); i++)
 		{
 			Board *copy = board.copy();
 			copy->doMove(legal_moves[i], pl_side);
