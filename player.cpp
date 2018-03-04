@@ -124,7 +124,7 @@ void Player::calculateScores(Node *n, Board* b, Side s, int depth)
 	if(depth == 0)
 		return;
 	vector<Move*>* next_moves = b->getLegalMoves(s);
-	for(int i = 0; i < next_moves->size(); i++)
+	for(unsigned int i = 0; i < next_moves->size(); i++)
 	{
 		Board * newBoard = b->copy();
 		newBoard->doMove((*next_moves).at(i), s);
