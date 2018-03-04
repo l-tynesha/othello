@@ -29,8 +29,10 @@ public:
 	Move* move;
 	int score;
 	vector<Node*> next_moves;
+	Move* original_move;
 	Node()
 	{
+		original_move = nullptr;
 		move = nullptr;
 	}
 	Node(Move *m)
