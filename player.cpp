@@ -48,8 +48,9 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
 		board->doMove(opponentsMove, op_side);
 	
 	Node *head = new Node(opponentsMove);
-	calculateScores(head, board, pl_side, 2);
-	Move *bestmove = minimax(head, 2, op_side);
+	head->score = 0;
+	calculateScores(head, board, pl_side, 2, 2);
+	Move *bestmove = minimax(head, 2, op_side)->original_move;
 	if(bestmove != nullptr)
 		board->doMove(bestmove, pl_side);
 	return bestmove;
@@ -119,7 +120,7 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
 	*/
 }
 
-void Player::calculateScores(Node *n, Board* b, Side s, int depth)
+void Player::calculateScores(Node *n, Board* b, Side s, int depth, int originaldepth)
 {
 	if(depth == 0)
 		return;
@@ -130,24 +131,62 @@ void Player::calculateScores(Node *n, Board* b, Side s, int depth)
 		newBoard->doMove((*next_moves).at(i), s);
 		Node *child = new Node((*next_moves).at(i));
 		child->score = newBoard->getScore(s);
+		if(originaldepth == depth)
+			child->original_move = (*next_moves).at(i);
+		else
+			child->original_move = n->original_move;
+	
 		n->addNextMove(child);
-		calculateScores(child, newBoard, b->getOppositeSide(s), depth - 1);
+		calculateScores(child, newBoard, getOppositeSide(s), depth - 1, originaldepth);
 		delete newBoard;
 	}
 	delete next_moves;
-	
 }
 
-Move *Player::minimax(Node *n, int depth, Side side)
-{/*
-	vector<Node*>* next = n->next_moves;
-	if(next->size() == 0 || depth <= 0)
-		return n->score;
+Node *Player::minimax(Node *n, int depth, Side side)
+{
+	vector<Node*> next = n->next_moves;
+	if(next.size() == 0 || depth == 0)
+		return n;
 	
-	int max_score = -1000000000;
-	Move * best_move;
-	for(int i = 0; i < next->size(); i++)
-		max_score = max(max_score, -1 * minimax(next[i], depth - 1, side);
-	return max_score;*/
-return nullptr;
+	Node *best_move = nullptr;
+	if(side == pl_side)
+	{
+		for(unsigned int i = 0; i < next.size(); i++)
+		{
+			Node * m = minimax(next.at(i), depth - 1, getOppositeSide(side));
+			if(best_move == nullptr)
+				best_move = m;
+			else if(m->score > best_move->score)
+				best_move = m;
+		}
+		return best_move;
+	}
+	else
+	{
+		for(unsigned int i = 0; i < next.size(); i++)
+		{
+			Node * m = minimax(next.at(i), depth - 1, getOppositeSide(side));
+			if(best_move == nullptr)
+				best_move = m;
+			else if(m->score < best_move->score)
+				best_move = m;
+		}
+		return best_move;
+	}
+}
+
+/*
+ * Get opposite side
+ */
+Side Player::getOppositeSide(Side this_side)
+{
+    if (this_side == BLACK)
+    {
+         return WHITE;
+    }
+    else
+    {
+         return BLACK;
+    }
 }
