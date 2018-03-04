@@ -49,75 +49,14 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
 		board->doMove(opponentsMove, op_side);
 	
 	Node *head = new Node(opponentsMove);
-	calculateScores(head, board, pl_side, 3, 3);
-	Move *bestmove = minimax(head, 3, op_side)->original_move;
+	int depth = 1;
+	if(testingMinimax)
+		depth = 2;
+	calculateScores(head, board, pl_side, depth, depth);
+	Move *bestmove = minimax(head, depth, op_side)->original_move;
 	if(bestmove != nullptr)
 		board->doMove(bestmove, pl_side);
 	return bestmove;
-	/*
-    vector<Move*> legal_moves;
-    for(int x = 0; x < 8; x++)
-    {
-		for(int y = 0; y < 8; y++)
-		{
-			Move* m = new Move(x, y);
-			if(board.checkMove(m, pl_side))
-			{
-				legal_moves.push_back(m);
-				if(board.isCorner(m))
-				{
-					board.doMove(m, pl_side);
-					return m;
-				}
-			}
-		}
-	}
-	
-	if(legal_moves.size() > 0)
-	{
-		Move* bestmove = nullptr;
-		int max_moves = -1;
-		for(unsigned int i = 0; i < legal_moves.size(); i++)
-		{
-			Board *copy = board.copy();
-			copy->doMove(legal_moves[i], pl_side);
-			int pl_moves = 0;
-			for(int x = 0; x < 8; x++)
-			{
-				for(int y = 0; y < 8; y++)
-				{
-					Move* m = new Move(x, y);
-					if(copy->checkMove(m, pl_side))
-					{
-						pl_moves++;
-						if(board.isCorner(m))
-							pl_moves += 10;
-						else if(board.isEdge(m))
-							pl_moves += 2;
-						else if(board.isAdToCorner(m))
-							pl_moves -= 7;
-					}
-				}
-			}
-			if(pl_moves > max_moves)
-			{
-				max_moves = pl_moves;
-				bestmove = legal_moves[i];
-			}
-			delete copy;
-		}
-			
-		if(bestmove != nullptr)
-		{
-			board.doMove(bestmove, pl_side);
-			return bestmove;
-		}
-		else
-			return nullptr;
-	}
-	else
-		return nullptr;
-	*/
 }
 
 void Player::calculateScores(Node *n, Board* b, Side s, int depth, int originaldepth)
@@ -131,13 +70,27 @@ void Player::calculateScores(Node *n, Board* b, Side s, int depth, int originald
 		Move* m = (*next_moves).at(i);
 		newBoard->doMove(m, s);
 		Node *child = new Node((*next_moves).at(i));
-		int score = newBoard->getScore(s);
+		
+		double score = newBoard->getScore(pl_side);
+		if(!testingMinimax)
+		{
+			int sign = 1;
+			if(s != pl_side)
+				sign = -1;
+			score += b->getLegalMoves(pl_side)->size();
+			if(b->isCorner(m))
+				score += 10 * sign;
+			else if(b->isAdToCorner(m))
+				score -= 7 * sign;
+			else if(b->isEdge(m))
+				score += 2 * sign;
+		}
 		child->score = score;
 		if(originaldepth == depth)
 			child->original_move = (*next_moves).at(i);
 		else
 			child->original_move = n->original_move;
-	
+		
 		n->addNextMove(child);
 		calculateScores(child, newBoard, getOppositeSide(s), depth - 1, originaldepth);
 		delete newBoard;
@@ -152,7 +105,7 @@ Node *Player::minimax(Node *n, int depth, Side side)
 		return n;
 	
 	Node *best_move = nullptr;
-	if(side == pl_side)
+	if(!testingMinimax || (side == pl_side && testingMinimax))
 	{
 		for(unsigned int i = 0; i < next.size(); i++)
 		{
