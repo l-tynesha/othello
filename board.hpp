@@ -34,7 +34,7 @@ public:
 	int getScore(Side side);
     void setBoard(char data[]);
 	vector<Move*>* getLegalMoves(Side side);
-	Side getOppositeSide(Side this_side);
+	
 };
 
 #endif

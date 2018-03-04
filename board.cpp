@@ -267,18 +267,3 @@ vector<Move*>* Board::getLegalMoves(Side side)
 	}
     return legal_moves;
 }
-
-/*
- * Get opposite side
- */
-Side Board::getOppositeSide(Side this_side)
-{
-    if (this_side == BLACK)
-    {
-         return WHITE;
-    }
-    else
-    {
-         return BLACK;
-    }
-}
