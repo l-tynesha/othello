@@ -59,6 +59,12 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
 	}
 	
 	
+	
+	
+	Move *bestmove = minimax(opponentsMove, 2, pl_side);
+	if(bestmove != nullptr)
+		board.doMove(bestmove, pl_side);
+	return bestmove;
 	/*
     vector<Move*> legal_moves;
     for(int x = 0; x < 8; x++)
@@ -123,4 +129,9 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
 	else
 		return nullptr;
 	*/
+}
+
+Move *Player::minimax(Node *n, int depth, Side pl_side)
+{
+	
 }
