@@ -16,7 +16,7 @@ public:
     Player(Side side);
     ~Player();
     Move *doMove(Move *opponentsMove, int msLeft);
-	vector<Move*>* getLegalMoves(Move *opponent, Side side);
+	vector<Move*>* getLegalMoves(Board *board, Side side);
 
     // Flag to tell if the player is running within the test_minimax context
     bool testingMinimax;

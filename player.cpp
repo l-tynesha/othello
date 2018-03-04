@@ -29,7 +29,7 @@ Player::~Player() {
 /* 
  * Finds all legal moves at a given stage
  */
-vector<Move*>* Player::getLegalMoves(Move* oppponent, Side side)
+vector<Move*>* Player::getLegalMoves(Board *board, Side side)
 {
 	vector<Move*> *legal_moves = new vector<Move*>();
     for(int x = 0; x < 8; x++)
@@ -37,7 +37,7 @@ vector<Move*>* Player::getLegalMoves(Move* oppponent, Side side)
 		for(int y = 0; y < 8; y++)
 		{
 			Move* m = new Move(x, y);
-			if(board.checkMove(m, side))
+			if(board->checkMove(m, side))
 				legal_moves->push_back(m);
 		}
 	}
