@@ -132,7 +132,9 @@ void Player::calculateScores(Node *n, Board* b, Side s, int depth)
 		child->score = newBoard->getScore(s);
 		n->addNextMove(child);
 		calculateScores(child, newBoard, b->getOppositeSide(s), depth - 1);
+		delete newBoard;
 	}
+	delete next_moves;
 	
 }
 
