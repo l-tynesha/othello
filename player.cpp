@@ -127,11 +127,11 @@ void Player::calculateScores(Node *n, Board* b, Side s, int depth)
 	for(int i = 0; i < next_moves->size(); i++)
 	{
 		Board * newBoard = b->copy();
-		newBoard->doMove(next_moves[i], s);
-		Node *child = new Node(next_moves[i]);
+		newBoard->doMove((*next_moves).at(i), s);
+		Node *child = new Node((*next_moves).at(i));
 		child->score = newBoard->getScore(s);
 		n->addNextMove(child);
-		calculateScores(child, newBoard, );
+		calculateScores(child, newBoard, b->getOppositeSide(s), depth - 1);
 	}
 	
 }
