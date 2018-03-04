@@ -26,24 +26,6 @@ Player::Player(Side side) {
 Player::~Player() {
 }
 
-/* 
- * Finds all legal moves at a given stage
- */
-vector<Move*>* Player::getLegalMoves(Board *board, Side side)
-{
-	vector<Move*> *legal_moves = new vector<Move*>();
-    for(int x = 0; x < 8; x++)
-    {
-		for(int y = 0; y < 8; y++)
-		{
-			Move* m = new Move(x, y);
-			if(board->checkMove(m, side))
-				legal_moves->push_back(m);
-		}
-	}
-    return legal_moves;
-}
-
 /*
  * Compute the next move given the opponent's last move. Your AI is
  * expected to keep track of the board on its own. If this is the first move,
@@ -63,14 +45,14 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
      * process the opponent's opponents move before calculating your own move
      */
     if(opponentsMove != nullptr)
-		board.doMove(opponentsMove, op_side);
-	/*
+		board->doMove(opponentsMove, op_side);
 	
-	Move *bestmove = minimax(opponentsMove, 2, pl_side);
+	Node *head = new Node(opponentsMove);
+	calculateScores(head, board, op_side, 2);
+	Move *bestmove = minimax(head, 2, op_side);
 	if(bestmove != nullptr)
-		board.doMove(bestmove, pl_side);
-	return bestmove;*/
-	return nullptr;
+		board->doMove(bestmove, pl_side);
+	return bestmove;
 	/*
     vector<Move*> legal_moves;
     for(int x = 0; x < 8; x++)
@@ -137,7 +119,24 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
 	*/
 }
 
-Move *Player::minimax(Node *n, int depth, Side pl_side)
+void Player::calculateScores(Node *n, Board* b, Side s, int depth)
 {
+	if(depth == 0)
+		return;
+	b->getLegalMoves(s);
 	
+}
+
+Move *Player::minimax(Node *n, int depth, Side side)
+{/*
+	vector<Node*>* next = n->next_moves;
+	if(next->size() == 0 || depth <= 0)
+		return n->score;
+	
+	int max_score = -1000000000;
+	Move * best_move;
+	for(int i = 0; i < next->size(); i++)
+		max_score = max(max_score, -1 * minimax(next[i], depth - 1, side);
+	return max_score;*/
+return nullptr;
 }
