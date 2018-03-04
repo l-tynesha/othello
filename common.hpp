@@ -34,10 +34,13 @@ public:
 	{
 		original_move = nullptr;
 		move = nullptr;
+		score = 0;
 	}
 	Node(Move *m)
 	{
 		move = m;
+		original_move = nullptr;
+		score = 0;
 	}
 	void addNextMove(Node *next)
 	{
