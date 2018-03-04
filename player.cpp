@@ -48,7 +48,7 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
 		board->doMove(opponentsMove, op_side);
 	
 	Node *head = new Node(opponentsMove);
-	calculateScores(head, board, op_side, 2);
+	calculateScores(head, board, pl_side, 2);
 	Move *bestmove = minimax(head, 2, op_side);
 	if(bestmove != nullptr)
 		board->doMove(bestmove, pl_side);
@@ -123,7 +123,16 @@ void Player::calculateScores(Node *n, Board* b, Side s, int depth)
 {
 	if(depth == 0)
 		return;
-	b->getLegalMoves(s);
+	vector<Move*>* next_moves = b->getLegalMoves(s);
+	for(int i = 0; i < next_moves->size(); i++)
+	{
+		Board * newBoard = b->copy();
+		newBoard->doMove(next_moves[i], s);
+		Node *child = new Node(next_moves[i]);
+		child->score = newBoard->getScore(s);
+		n->addNextMove(child);
+		calculateScores(child, newBoard, );
+	}
 	
 }
 
