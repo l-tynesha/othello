@@ -61,7 +61,7 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
 	
 	
 	
-	Move *bestmove = minimax(opponentsMove, 2, pl_side);
+	Move *bestmove = minimax(head, 2, op_side);
 	if(bestmove != nullptr)
 		board.doMove(bestmove, pl_side);
 	return bestmove;
@@ -131,7 +131,18 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
 	*/
 }
 
-Move *Player::minimax(Node *n, int depth, Side pl_side)
+Move *Player::minimax(Node *n, int depth, Side side)
 {
 	
+	vector<Node*>* next = n->next_moves;
+	if(next->size() == 0 || depth <= 0)
+	{
+		return n->score *
+	}
+	
+	int max_score = -1000000000;
+	for(int i = 0; i < next->size(); i++)
+	{
+		max_score = max(max_score, -1 * minimax(next[i], depth - 1, )
+	}
 }
