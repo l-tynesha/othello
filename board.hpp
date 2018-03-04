@@ -3,7 +3,7 @@
 
 #include <bitset>
 #include "common.hpp"
-using namespace std;
+
 
 class Board {
 
@@ -31,7 +31,7 @@ public:
     int count(Side side);
     int countBlack();
     int countWhite();
-
+	int score(Side side);
     void setBoard(char data[]);
 };
 

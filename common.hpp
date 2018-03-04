@@ -1,6 +1,8 @@
 #ifndef __COMMON_H__
 #define __COMMON_H__
 
+#include <vector>
+using namespace std;
 enum Side { 
     WHITE, BLACK
 };
@@ -35,7 +37,7 @@ public:
 	{
 		move = m;
 	}
-	void addNextMove(Move *next)
+	void addNextMove(Node *next)
 	{
 		next_moves.push_back(next);
 	}
@@ -45,6 +47,7 @@ public:
 	}
 };
 
+/*
 class Tree {
 public:
 	Node* head;
@@ -64,9 +67,6 @@ public:
 		}
 		delete head;
 	}
-	void addNode(Move *m, int score)
-	{
-		
-	}
 }
+*/
 #endif

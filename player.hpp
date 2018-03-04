@@ -2,7 +2,6 @@
 #define __PLAYER_H__
 
 #include <iostream>
-#include <vector>
 #include "common.hpp"
 #include "board.hpp"
 using namespace std;

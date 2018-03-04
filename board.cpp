@@ -237,3 +237,14 @@ bool Board::isAdToCorner(Move *m)
 		{return true;}
 	return false;   
 }
+
+/*
+ * Calculates and returns player's board score
+*/
+int Board::getScore(Side pl_side)
+{
+	if(pl_side == BLACK)
+		return countBlack() - countWhite();
+	else
+		return countWhite() - countBlack();
+}

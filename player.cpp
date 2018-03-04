@@ -46,6 +46,20 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
      */
     if(opponentsMove != nullptr)
 		board.doMove(opponentsMove, op_side);
+	
+	vector<Move*> legal_moves;
+    for(int x = 0; x < 8; x++)
+    {
+		for(int y = 0; y < 8; y++)
+		{
+			Move* m = new Move(x, y);
+			if(board.checkMove(m, pl_side))
+				legal_moves.push_back(m);
+		}
+	}
+	
+	
+	/*
     vector<Move*> legal_moves;
     for(int x = 0; x < 8; x++)
     {
@@ -108,4 +122,5 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
 	}
 	else
 		return nullptr;
+	*/
 }
