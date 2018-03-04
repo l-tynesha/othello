@@ -7,6 +7,7 @@
 Player::Player(Side side) {
     // Will be set to true in test_minimax.cpp.
     testingMinimax = false;
+    board = new Board();
     pl_side = side;
     if (side == BLACK)
         op_side = WHITE;
@@ -48,9 +49,8 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
 		board->doMove(opponentsMove, op_side);
 	
 	Node *head = new Node(opponentsMove);
-	head->score = 0;
-	calculateScores(head, board, pl_side, 2, 2);
-	Move *bestmove = minimax(head, 2, op_side)->original_move;
+	calculateScores(head, board, pl_side, 3, 3);
+	Move *bestmove = minimax(head, 3, op_side)->original_move;
 	if(bestmove != nullptr)
 		board->doMove(bestmove, pl_side);
 	return bestmove;
@@ -128,9 +128,11 @@ void Player::calculateScores(Node *n, Board* b, Side s, int depth, int originald
 	for(unsigned int i = 0; i < next_moves->size(); i++)
 	{
 		Board * newBoard = b->copy();
-		newBoard->doMove((*next_moves).at(i), s);
+		Move* m = (*next_moves).at(i);
+		newBoard->doMove(m, s);
 		Node *child = new Node((*next_moves).at(i));
-		child->score = newBoard->getScore(s);
+		int score = newBoard->getScore(s);
+		child->score = score;
 		if(originaldepth == depth)
 			child->original_move = (*next_moves).at(i);
 		else
@@ -157,7 +159,7 @@ Node *Player::minimax(Node *n, int depth, Side side)
 			Node * m = minimax(next.at(i), depth - 1, getOppositeSide(side));
 			if(best_move == nullptr)
 				best_move = m;
-			else if(m->score > best_move->score)
+			else if(m != nullptr && m->score > best_move->score)
 				best_move = m;
 		}
 		return best_move;
@@ -169,7 +171,7 @@ Node *Player::minimax(Node *n, int depth, Side side)
 			Node * m = minimax(next.at(i), depth - 1, getOppositeSide(side));
 			if(best_move == nullptr)
 				best_move = m;
-			else if(m->score < best_move->score)
+			else if(m != nullptr && m->score < best_move->score)
 				best_move = m;
 		}
 		return best_move;
