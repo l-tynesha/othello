@@ -10,12 +10,11 @@ class Player {
 private:
     Side op_side;
 	Side pl_side;
-	Node *minimax(Node *n, int depth, Side pl_side);
-	void calculateScores(Node *n, Board* b, Side s, int depth, int originaldepth);
+	Node *minimax(vector<Move*>* moves, Board *b, int depth, Side pl_side);
+	//void calculateScores(Node *n, Board* b, Side s, int depth, int originaldepth);
 	Side getOppositeSide(Side this_side);
 public:
-    Player(Side side);
-    
+    Player(Side side);  
     ~Player();
     Move *doMove(Move *opponentsMove, int msLeft);
 	Board *board;
