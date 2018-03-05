@@ -27,7 +27,7 @@ public:
 class Node {
 public:
 	Move* move;
-	double score;
+	int score;
 	vector<Node*> next_moves;
 	Move* original_move;
 	Node()
@@ -51,4 +51,27 @@ public:
 		delete move;
 	}
 };
+
+/*
+class Tree {
+public:
+	Node* head;
+	Tree()
+	{
+		head = nullptr;
+	}
+	~Tree
+	{
+		deleteTree(head);
+	}
+	void deleteTree(Node *head)
+	{
+		for(int i = 0; i < next_moves.size(); i++)
+		{
+			deleteTree(next_moves[i]);
+		}
+		delete head;
+	}
+}
+*/
 #endif
