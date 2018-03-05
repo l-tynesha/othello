@@ -44,21 +44,27 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
     /*
      * TODO: Implement how moves your AI should play here. You should first
      * process the opponent's opponents move before calculating your own move
-     */
-    if(opponentsMove != nullptr)
-		board->doMove(opponentsMove, op_side);
-	
-	Node *head = new Node(opponentsMove);
-	int depth = 1;
+     */	
+	//int depth = 1
+	int depth = 2;
 	if(testingMinimax)
 		depth = 2;
-	calculateScores(head, board, pl_side, depth, depth);
-	Move *bestmove = minimax(head, depth, op_side)->original_move;
-	if(bestmove != nullptr)
-		board->doMove(bestmove, pl_side);
-	return bestmove;
+	if(opponentsMove != nullptr)
+		board->doMove(opponentsMove, op_side);
+	vector<Move*>* next = board->getLegalMoves(pl_side); 
+	
+	if((*next).size() > 0)
+	{
+		Move *bestmove = minimax(next, board, depth, pl_side)->move;
+		if(bestmove != nullptr)
+			board->doMove(bestmove, pl_side);
+		return bestmove;
+	}
+	else
+		return nullptr;
 }
 
+/*
 void Player::calculateScores(Node *n, Board* b, Side s, int depth, int originaldepth)
 {
 	if(depth == 0)
@@ -72,6 +78,7 @@ void Player::calculateScores(Node *n, Board* b, Side s, int depth, int originald
 		Node *child = new Node((*next_moves).at(i));
 		
 		double score = newBoard->getScore(pl_side);
+		
 		if(!testingMinimax)
 		{
 			int sign = 1;
@@ -85,6 +92,7 @@ void Player::calculateScores(Node *n, Board* b, Side s, int depth, int originald
 			else if(b->isEdge(m))
 				score += 2 * sign;
 		}
+		
 		child->score = score;
 		if(originaldepth == depth)
 			child->original_move = (*next_moves).at(i);
@@ -96,8 +104,119 @@ void Player::calculateScores(Node *n, Board* b, Side s, int depth, int originald
 		delete newBoard;
 	}
 	delete next_moves;
+}*/
+Node *Player::minimax(vector<Move*>* moves, Board* b, int depth, Side side)
+{
+	if(depth == 1)
+	{
+		Node* best_move = nullptr;
+		for(unsigned int i = 0; i < (*moves).size(); i++)
+		{
+			Board *copy = b->copy();
+			copy->doMove((*moves).at(i), side);
+			int score = copy->getScore(pl_side);
+			if(best_move == nullptr)
+			{
+				best_move = new Node((*moves).at(i));
+				best_move->score = score;
+			}
+			else if(side == op_side && score < best_move->score)
+			{
+				best_move->move = (*moves).at(i);
+				best_move->score = score;
+			}
+			else if(side == pl_side && score > best_move->score)
+			{
+				best_move->move = (*moves).at(i);
+				best_move->score = score;
+			}
+			delete copy;
+		}
+		return best_move;
+	}
+	Node *best_move = nullptr;
+	for(unsigned int i = 0; i < (*moves).size(); i++)
+	{
+		Board *copy = b->copy();
+		copy->doMove((*moves).at(i), side);
+		vector<Move*>* next = board->getLegalMoves(pl_side); 
+		if((*next).size() == 0)
+			return new Node((*moves).at(i));
+		Node *n = minimax(copy->getLegalMoves(getOppositeSide(side)), copy, depth - 1, getOppositeSide(side));
+		int score = n->score;
+		if(best_move == nullptr)
+		{
+			best_move = new Node((*moves).at(i));
+			best_move->score = score;
+		}
+		else if(side == op_side && score < best_move->score)
+		{
+			best_move->move = (*moves).at(i);
+			best_move->score = score;
+		}
+		else if(side == pl_side && score > best_move->score)
+		{
+			best_move->move = (*moves).at(i);
+			best_move->score = score;
+		}
+		delete copy;
+	}
+	return best_move;
 }
 
+/*
+Node *Player::minimax(Node *n, Board* b, int depth, Side side)
+{
+	if(depth == 1)
+	{
+		Board *copy = b->copy();
+		copy->doMove(n->move, side);
+		n->score = b->getScore(pl_side);
+		delete copy;
+		//std::cerr << "op(" << n->move->x << ", " << n->move->y << ")";
+		return n;
+	}
+	
+	Node *best_move = nullptr;
+	Board *copy = b->copy();
+	if(n->move != nullptr)
+		copy->doMove(n->move, side);
+	vector<Move*>* next = b->getLegalMoves(getOppositeSide(side));
+	std::cerr << (*next).size() << std::endl;
+	if(side == pl_side)
+	{
+		for(unsigned int i = 0; i < (*next).size(); i++)
+		{
+			
+			Move *move = (*next).at(i);
+			std::cerr << "op(" << move->x << ", " << move->y << ")";
+			Node *m = minimax(new Node((*next).at(i)), b, depth - 1, getOppositeSide(side));
+			if(best_move == nullptr)
+				best_move = m;
+			else if(m!= nullptr && m->score < best_move->score)
+				best_move = m;
+		}
+	}
+	else
+	{
+		for(unsigned int i = 0; i < (*next).size(); i++)
+		{
+			Move *move = (*next).at(i);
+			std::cerr << "pl(" << move->x << ", " << move->y << ")";
+			Node *m = minimax(new Node((*next).at(i)), b, depth - 1, getOppositeSide(side));
+			if(best_move == nullptr)
+				best_move = m;
+			else if(m!= nullptr && m->score > best_move->score)
+				best_move = m;
+		}
+	}
+	std::cerr << std::endl;
+	delete copy;
+	n->score = best_move->score;
+	n->move = best_move->move;
+	return n;
+}*/
+/*
 Node *Player::minimax(Node *n, int depth, Side side)
 {
 	vector<Node*> next = n->next_moves;
@@ -105,7 +224,8 @@ Node *Player::minimax(Node *n, int depth, Side side)
 		return n;
 	
 	Node *best_move = nullptr;
-	if(!testingMinimax || (side == pl_side && testingMinimax))
+	//if(!testingMinimax || (side == pl_side && testingMinimax))
+	if(side == pl_side)
 	{
 		for(unsigned int i = 0; i < next.size(); i++)
 		{
@@ -130,7 +250,7 @@ Node *Player::minimax(Node *n, int depth, Side side)
 		return best_move;
 	}
 }
-
+*/
 /*
  * Get opposite side
  */
