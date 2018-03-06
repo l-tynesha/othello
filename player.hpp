@@ -11,7 +11,6 @@ private:
     Side op_side;
 	Side pl_side;
 	Node *minimax(vector<Move*>* moves, Board *b, int depth, Side pl_side);
-	//void calculateScores(Node *n, Board* b, Side s, int depth, int originaldepth);
 	Side getOppositeSide(Side this_side);
 public:
     Player(Side side);  
