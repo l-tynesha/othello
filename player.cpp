@@ -25,6 +25,7 @@ Player::Player(Side side) {
  * Destructor for the player.
  */
 Player::~Player() {
+	delete board;
 }
 
 /*
@@ -118,7 +119,6 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
 	else
 		return nullptr;
 	*/
-	//int depth = 1
 	int depth = 2;
 	if(testingMinimax)
 		depth = 2;
@@ -131,10 +131,14 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
 		Move *bestmove = minimax(next, board, depth, pl_side)->move;
 		if(bestmove != nullptr)
 			board->doMove(bestmove, pl_side);
+		delete next;
 		return bestmove;
 	}
 	else
+	{
+		delete next;
 		return nullptr;
+	}
 
 }
 
@@ -193,6 +197,7 @@ Node *Player::minimax(vector<Move*>* moves, Board* b, int depth, Side side)
 			best_move->move = (*moves).at(i);
 			best_move->score = score;
 		}
+		delete next;
 		delete copy;
 	}
 	return best_move;
