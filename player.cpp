@@ -46,79 +46,6 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
      * TODO: Implement how moves your AI should play here. You should first
      * process the opponent's opponents move before calculating your own move
 */
-/*
-    if(opponentsMove != nullptr)
-		board->doMove(opponentsMove, op_side);
-	
-	Node *head = new Node(opponentsMove);
-	calculateScores(head, board, pl_side, 3, 3);
-	Move *bestmove = minimax(head, 3, op_side)->original_move;
-	if(bestmove != nullptr)
-		board->doMove(bestmove, pl_side);
-	return bestmove;
-    vector<Move*> legal_moves;
-    for(int x = 0; x < 8; x++)
-    {
-		for(int y = 0; y < 8; y++)
-		{
-			Move* m = new Move(x, y);
-			if(board.checkMove(m, pl_side))
-			{
-				legal_moves.push_back(m);
-				if(board.isCorner(m))
-				{
-					board.doMove(m, pl_side);
-					return m;
-				}
-			}
-		}
-	}
-	
-	if(legal_moves.size() > 0)
-	{
-		Move* bestmove = nullptr;
-		int max_moves = -1;
-		for(unsigned int i = 0; i < legal_moves.size(); i++)
-		{
-			Board *copy = board.copy();
-			copy->doMove(legal_moves[i], pl_side);
-			int pl_moves = 0;
-			for(int x = 0; x < 8; x++)
-			{
-				for(int y = 0; y < 8; y++)
-				{
-					Move* m = new Move(x, y);
-					if(copy->checkMove(m, pl_side))
-					{
-						pl_moves++;
-						if(board.isCorner(m))
-							pl_moves += 10;
-						else if(board.isEdge(m))
-							pl_moves += 2;
-						else if(board.isAdToCorner(m))
-							pl_moves -= 7;
-					}
-				}
-			}
-			if(pl_moves > max_moves)
-			{
-				max_moves = pl_moves;
-				bestmove = legal_moves[i];
-			}
-			delete copy;
-		}
-			
-		if(bestmove != nullptr)
-		{
-			board.doMove(bestmove, pl_side);
-			return bestmove;
-		}
-		else
-			return nullptr;
-	}
-	else
-		return nullptr;
-	*/
 	int depth = 2;
 	if(testingMinimax)
 		depth = 2;
@@ -175,6 +102,7 @@ Node *Player::minimax(vector<Move*>* moves, Board* b, int depth, Side side)
 				best_move->move = m;
 				best_move->score = score;
 			}
+			delete next;
 			delete copy;
 		}
 		return best_move;
