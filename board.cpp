@@ -267,3 +267,21 @@ vector<Move*>* Board::getLegalMoves(Side side)
 	}
     return legal_moves;
 }
+
+/*
+ * Computes additional heuristic 
+ */
+int Board::advancedScore(Move *m, Board* b, Side s, Side pl_side)
+{
+	int sign = 1;
+	if(s != pl_side)
+		sign = -1;
+	int score = 0;
+	if(b->isCorner(m))
+		score += 50 * sign;
+	if(b->isAdToCorner(m))
+		score -= 50 * sign;
+	if(b->isEdge(m))
+		score += 2 * sign;
+	return score;
+}
