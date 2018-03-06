@@ -150,22 +150,29 @@ Node *Player::minimax(vector<Move*>* moves, Board* b, int depth, Side side)
 		Node* best_move = nullptr;
 		for(unsigned int i = 0; i < (*moves).size(); i++)
 		{
+			Move* m = (*moves).at(i);
 			Board *copy = b->copy();
-			copy->doMove((*moves).at(i), side);
-			int score = copy->getScore(pl_side);
+			copy->doMove(m, side);
+			vector<Move*>* next = copy->getLegalMoves(pl_side); 
+			int score = copy->getScore(pl_side);		
+			if(!testingMinimax)
+			{
+				score += copy->advancedScore(m, copy, side, pl_side);
+				score += (*next).size();
+			}
 			if(best_move == nullptr)
 			{
-				best_move = new Node((*moves).at(i));
+				best_move = new Node(m);
 				best_move->score = score;
 			}
 			else if(side == op_side && score < best_move->score)
 			{
-				best_move->move = (*moves).at(i);
+				best_move->move = m;
 				best_move->score = score;
 			}
 			else if(side == pl_side && score > best_move->score)
 			{
-				best_move->move = (*moves).at(i);
+				best_move->move = m;
 				best_move->score = score;
 			}
 			delete copy;
@@ -175,26 +182,29 @@ Node *Player::minimax(vector<Move*>* moves, Board* b, int depth, Side side)
 	Node *best_move = nullptr;
 	for(unsigned int i = 0; i < (*moves).size(); i++)
 	{
+		Move* m = (*moves).at(i);
 		Board *copy = b->copy();
-		copy->doMove((*moves).at(i), side);
+		copy->doMove(m, side);
 		vector<Move*>* next = copy->getLegalMoves(getOppositeSide(side)); 
 		if((*next).size() == 0)
-			return new Node((*moves).at(i));
+			return new Node(m);
 		Node *n = minimax(next, copy, depth - 1, getOppositeSide(side));
 		int score = n->score;
+		if(!testingMinimax)
+			score += copy->advancedScore(m, copy, side, pl_side);
 		if(best_move == nullptr)
 		{
-			best_move = new Node((*moves).at(i));
+			best_move = new Node(m);
 			best_move->score = score;
 		}
 		else if(side == op_side && score < best_move->score)
 		{
-			best_move->move = (*moves).at(i);
+			best_move->move = m;
 			best_move->score = score;
 		}
 		else if(side == pl_side && score > best_move->score)
 		{
-			best_move->move = (*moves).at(i);
+			best_move->move = m;
 			best_move->score = score;
 		}
 		delete next;
