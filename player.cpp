@@ -9,15 +9,7 @@ Player::Player(Side side) {
     testingMinimax = false;
     board = new Board();
     pl_side = side;
-    if (side == BLACK)
-        op_side = WHITE;
-    else 
-        op_side = BLACK;
-    /*
-     * TODO: Do any initialization you need to do here (setting up the board,
-     * precalculating things, etc.) However, remember that you will only have
-     * 30 seconds.
-     */
+    op_side = getOppositeSide(side);
 }
 
 /*
@@ -41,10 +33,7 @@ Player::~Player() {
  * return nullptr.
  */
 Move *Player::doMove(Move *opponentsMove, int msLeft) {
-    /*
-     * TODO: Implement how moves your AI should play here. You should first
-     * process the opponent's opponents move before calculating your own move
-*/
+
 	int depth = 4;
 	if(testingMinimax)
 		depth = 2;
@@ -67,7 +56,6 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
 		delete next;
 		return nullptr;
 	}
-
 }
 
 
@@ -104,6 +92,8 @@ Node *Player::minimax(vector<Move*>* moves, Board* b, int depth, Side side, int 
 				best_move->score = score;
 			}
 			std::cerr << "depth: " << depth << " (" << alpha << "," << beta << ")" << std::endl;
+			for(unsigned int i = 0; i < (*next).size(); i++)
+				delete (*next).at(i);
 			delete next;
 			delete copy;
 		}
@@ -145,7 +135,20 @@ Node *Player::minimax(vector<Move*>* moves, Board* b, int depth, Side side, int 
 		if(beta <= alpha)
 		{
 			std::cerr << "BREAK depth: " << depth << " (" << alpha << "," << beta << ")" << std::endl;
+			for(unsigned int i = 0; i < (*next).size(); i++)
+			{
+				if((*next).at(i) != best_move->move)
+					delete (*next).at(i);
+			}
+			delete next;
+			delete copy;
 			break;
+		}
+		
+		for(unsigned int i = 0; i < (*next).size(); i++)
+		{
+			if((*next).at(i) != best_move->move)
+				delete (*next).at(i);
 		}
 		delete next;
 		delete copy;
