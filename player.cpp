@@ -13,7 +13,6 @@ Player::Player(Side side) {
         op_side = WHITE;
     else 
         op_side = BLACK;
-
     /*
      * TODO: Do any initialization you need to do here (setting up the board,
      * precalculating things, etc.) However, remember that you will only have
