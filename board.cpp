@@ -298,8 +298,8 @@ int Board::advancedScore(Move *m, Board* b, Side s, Side pl_side)
 	if(b->isAdToCorner(m))
 		score -= 50 * sign;
 	if(b->isEdge(m))
-		score += 2 * sign;
+		score += 3 * sign;
 	if(b->adjacentEdges(m))
-		score -= sign;
+		score -= 1 * sign;
 	return score;
 }
