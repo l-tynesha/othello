@@ -215,29 +215,36 @@ bool Board::isAdToCorner(Move *m)
 		{return true;}
 	else if(m->getX() == 1 && m->getY() == 0)
 		{return true;}
-	else if(m->getX() == 1 && m->getY() == 1)
-		{return true;}
 	else if(m->getX() == 6 && m->getY() == 0)
 		{return true;}
 	else if(m->getX() == 7 && m->getY() == 1)
-		{return true;}
-	else if(m->getX() == 6 && m->getY() == 1)
 		{return true;}
 	else if(m->getX() == 0 && m->getY() == 6)
 		{return true;}
 	else if(m->getX() == 1 && m->getY() == 7)
 		{return true;}
-	else if(m->getX() == 1 && m->getY() == 6)
-		{return true;}
 	else if(m->getX() == 7 && m->getY() == 6)
 		{return true;}
 	else if(m->getX() == 6 && m->getY() == 7)
 		{return true;}
-	else if(m->getX() == 6 && m->getY() == 6)
-		{return true;}
 	return false;   
 }
 
+/*
+ * Squares that are next to the corner but on the diagonal line
+ */
+bool Board::isDiaToCorner(Move *m)
+{
+	if(m->getX() == 1 && m->getY() == 1)
+		{return true;}
+	else if(m->getX() == 6 && m->getY() == 6)
+		{return true;}
+	else if(m->getX() == 6 && m->getY() == 1)
+		{return true;}
+	else if(m->getX() == 1 && m->getY() == 6)
+		{return true;}
+	return false;
+}
 /*
  * Check for adjacent edges to boundaries
  */
@@ -290,13 +297,76 @@ vector<Move*>* Board::getLegalMoves(Side side)
 int Board::advancedScore(Move *m, Board* b, Side s, Side pl_side)
 {
 	int sign = 1;
+	int x_corner = -1;
+	int y_corner = -1;
 	if(s != pl_side)
 		sign = -1;
 	int score = 0;
 	if(b->isCorner(m))
 		score += 50 * sign;
+	if (b->isDiaToCorner(m))
+	{
+		if (m->getX() == 1 && m->getY() == 1)
+		{
+			x_corner = 0;
+			y_corner = 0;
+		}
+		else if (m->getX() == 6 && m->getY() == 6)
+		{
+			x_corner = 7;
+			y_corner = 7;
+		}
+		else if (m->getX() == 1 && m->getY() == 6)
+		{
+			x_corner = 0;
+			y_corner = 7;
+		}
+		else if (m->getX() == 6 && m->getY() == 1)
+		{
+			x_corner = 7;
+			y_corner = 0;
+		}
+		if (taken[x_corner + 8 * y_corner])
+		{
+			score -= 2 * sign;
+		}
+		else
+		{
+			score -= 50 * sign;
+		}
+
+	}
 	if(b->isAdToCorner(m))
-		score -= 50 * sign;
+	{
+		if (m->getY() == 1)
+		{
+			y_corner = 0;
+		}
+		else if (m->getY() == 6)
+		{
+			y_corner = 7;
+		}
+		else if (m->getX() == 6)
+		{
+			x_corner = 7;
+		}
+		else if (m->getX() == 1)
+		{
+			x_corner = 0;
+		}
+		if (black[x_corner + 8 * y_corner] && pl_side == BLACK)
+		{
+			score += 3 * sign;
+		}
+		else if ((black[x_corner + 8 * y_corner] ^ taken[x_corner + 8 * y_corner]) && pl_side == WHITE)
+		{
+			score += 3 * sign;
+		}
+		else
+		{			
+			score -= 50 * sign;
+		}
+	}
 	if(b->isEdge(m))
 		score += 3 * sign;
 	if(b->adjacentEdges(m))
