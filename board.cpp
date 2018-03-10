@@ -239,6 +239,22 @@ bool Board::isAdToCorner(Move *m)
 }
 
 /*
+ * Check for adjacent edges to boundaries
+ */
+bool Board::adjacentEdges(Move *m)
+{
+	if(m->getX() == 1 && m->getY() <= 5 && m->getY() >= 2)
+		return true;
+	else if (m->getX() == 6 && m->getY() <= 5 && m->getY() >= 2)
+		return true;
+	else if (m->getY() == 1 && m->getX() <= 5 && m->getX() >= 2)
+		return true;
+	else if (m->getY() == 6 && m->getX() <= 5 && m->getX() >= 2)
+		return true;
+	return false;	
+}
+
+/*
  * Calculates and returns player's board score
 */
 int Board::getScore(Side pl_side)
@@ -283,5 +299,7 @@ int Board::advancedScore(Move *m, Board* b, Side s, Side pl_side)
 		score -= 50 * sign;
 	if(b->isEdge(m))
 		score += 2 * sign;
+	if(b->adjacentEdges(m))
+		score -= sign;
 	return score;
 }
