@@ -45,7 +45,7 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
      * TODO: Implement how moves your AI should play here. You should first
      * process the opponent's opponents move before calculating your own move
 */
-	int depth = 2;
+	int depth = 4;
 	if(testingMinimax)
 		depth = 2;
 	if(opponentsMove != nullptr)
@@ -54,7 +54,9 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
 	
 	if((*next).size() > 0)
 	{
-		Move *bestmove = minimax(next, board, depth, pl_side)->move;
+		int alpha = -1000000;
+		int beta = 10000000;
+		Move *bestmove = minimax(next, board, depth, pl_side, alpha, beta)->move;
 		if(bestmove != nullptr)
 			board->doMove(bestmove, pl_side);
 		delete next;
@@ -69,7 +71,7 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
 }
 
 
-Node *Player::minimax(vector<Move*>* moves, Board* b, int depth, Side side)
+Node *Player::minimax(vector<Move*>* moves, Board* b, int depth, Side side, int alpha, int beta)
 {
 	if(depth == 1)
 	{
@@ -101,6 +103,7 @@ Node *Player::minimax(vector<Move*>* moves, Board* b, int depth, Side side)
 				best_move->move = m;
 				best_move->score = score;
 			}
+			std::cerr << "depth: " << depth << " (" << alpha << "," << beta << ")" << std::endl;
 			delete next;
 			delete copy;
 		}
@@ -115,7 +118,7 @@ Node *Player::minimax(vector<Move*>* moves, Board* b, int depth, Side side)
 		vector<Move*>* next = copy->getLegalMoves(getOppositeSide(side)); 
 		if((*next).size() == 0)
 			return new Node(m);
-		Node *n = minimax(next, copy, depth - 1, getOppositeSide(side));
+		Node *n = minimax(next, copy, depth - 1, getOppositeSide(side), alpha, beta);
 		int score = n->score;
 		if(!testingMinimax)
 			score += copy->advancedScore(m, copy, side, pl_side);
@@ -133,6 +136,16 @@ Node *Player::minimax(vector<Move*>* moves, Board* b, int depth, Side side)
 		{
 			best_move->move = m;
 			best_move->score = score;
+		}
+		std::cerr << "depth: " << depth << " (" << alpha << "," << beta << ")" << std::endl;
+		if(side == pl_side && score > alpha)
+			alpha = score;
+		else if(side == op_side && score < beta)
+			beta = score;
+		if(beta <= alpha)
+		{
+			std::cerr << "BREAK depth: " << depth << " (" << alpha << "," << beta << ")" << std::endl;
+			break;
 		}
 		delete next;
 		delete copy;
