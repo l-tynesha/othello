@@ -37,6 +37,7 @@ public:
 	int advancedScore(Move *m, Board* b, Side s, Side pl_side);
     void setBoard(char data[]);
 	vector<Move*>* getLegalMoves(Side side);
+	int getNumberOfLegalMoves(Side side);
 	
 };
 

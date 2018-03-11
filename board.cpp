@@ -291,6 +291,22 @@ vector<Move*>* Board::getLegalMoves(Side side)
     return legal_moves;
 }
 
+int Board::getNumberOfLegalMoves(Side side)
+{
+	int n = 0;
+    for(int x = 0; x < 8; x++)
+    {
+		for(int y = 0; y < 8; y++)
+		{
+			Move* m = new Move(x, y);
+			if(checkMove(m, side))
+				n++;
+			delete m;
+		}
+	}
+    return n;
+}
+
 /*
  * Computes additional heuristic 
  */
