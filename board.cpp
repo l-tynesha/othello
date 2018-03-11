@@ -262,8 +262,32 @@ bool Board::adjacentEdges(Move *m)
 }
 
 /*
+ * Check for the inner corners
+ */
+bool Board::inner_corners(Move *m)
+{
+	if (m->getX() == 2 && m->getY() == 2)
+	{
+		return true;
+	}
+	else if (m->getX() == 2 && m->getY() == 5)
+	{
+		return true;
+	}
+	else if (m->getX() == 5 && m->getY() == 2)
+	{
+		return true;
+	}
+	else if (m->getX() == 5 && m->getY() == 5)
+	{
+		return true;
+	}
+	return false;
+}
+
+/*
  * Calculates and returns player's board score
-*/
+ */
 int Board::getScore(Side pl_side)
 {
 	if(pl_side == BLACK)
@@ -393,5 +417,7 @@ int Board::advancedScore(Move *m, Board* b, Side s, Side pl_side)
 		score += 3 * sign;
 	if(b->adjacentEdges(m))
 		score -= 1 * sign;
+	if(b->inner_corners(m))
+		score += 1 * sign;
 	return score;
 }

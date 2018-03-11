@@ -29,6 +29,7 @@ public:
     bool isEdge(Move *m);
 	bool adjacentEdges(Move *m);
 	bool isDiaToCorner(Move *m);
+	bool inner_corners(Move *m);
     void doMove(Move *m, Side side);
     int count(Side side);
     int countBlack();
