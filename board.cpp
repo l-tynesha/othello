@@ -346,7 +346,10 @@ int Board::advancedScore(Move *m, Board* b, Side s, Side pl_side)
 		{
 			y_corner = 7;
 		}
-		else if (m->getX() == 6)
+		else
+			y_corner = m->getY();
+		
+		if (m->getX() == 6)
 		{
 			x_corner = 7;
 		}
@@ -354,13 +357,16 @@ int Board::advancedScore(Move *m, Board* b, Side s, Side pl_side)
 		{
 			x_corner = 0;
 		}
+		else
+			x_corner = m->getX();
+		
 		if (black[x_corner + 8 * y_corner] && pl_side == BLACK)
 		{
-			score += 3 * sign;
+			score += 2 * sign;
 		}
 		else if ((black[x_corner + 8 * y_corner] ^ taken[x_corner + 8 * y_corner]) && pl_side == WHITE)
 		{
-			score += 3 * sign;
+			score += 2 * sign;
 		}
 		else
 		{			
