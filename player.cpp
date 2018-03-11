@@ -34,7 +34,7 @@ Player::~Player() {
  */
 Move *Player::doMove(Move *opponentsMove, int msLeft) {
 
-	int depth = 4;
+	int depth = 5;
 	if(testingMinimax)
 		depth = 2;
 	if(opponentsMove != nullptr)
@@ -91,7 +91,7 @@ Node *Player::minimax(vector<Move*>* moves, Board* b, int depth, Side side, int 
 				best_move->move = m;
 				best_move->score = score;
 			}
-			std::cerr << "depth: " << depth << " (" << alpha << "," << beta << ")" << std::endl;
+			//std::cerr << "depth: " << depth << " (" << alpha << "," << beta << ")" << std::endl;
 			for(unsigned int i = 0; i < (*next).size(); i++)
 				delete (*next).at(i);
 			delete next;
@@ -127,14 +127,14 @@ Node *Player::minimax(vector<Move*>* moves, Board* b, int depth, Side side, int 
 			best_move->move = m;
 			best_move->score = score;
 		}
-		std::cerr << "depth: " << depth << " (" << alpha << "," << beta << ")" << std::endl;
+		//std::cerr << "depth: " << depth << " (" << alpha << "," << beta << ")" << std::endl;
 		if(side == pl_side && score > alpha)
 			alpha = score;
 		else if(side == op_side && score < beta)
 			beta = score;
 		if(beta <= alpha)
 		{
-			std::cerr << "BREAK depth: " << depth << " (" << alpha << "," << beta << ")" << std::endl;
+			//std::cerr << "BREAK depth: " << depth << " (" << alpha << "," << beta << ")" << std::endl;
 			for(unsigned int i = 0; i < (*next).size(); i++)
 			{
 				if((*next).at(i) != best_move->move)
