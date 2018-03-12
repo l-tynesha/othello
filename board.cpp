@@ -410,7 +410,7 @@ int Board::advancedScore(Move *m, Board* b, Side s, Side pl_side)
 		}
 		else
 		{			
-			score -= 50 * sign;
+			score -= 30 * sign;
 		}
 	}
 	if(b->isEdge(m))
