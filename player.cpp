@@ -47,6 +47,12 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
 		Move *bestmove = minimax(next, board, depth, pl_side, alpha, beta)->move;
 		if(bestmove != nullptr)
 			board->doMove(bestmove, pl_side);
+		for(unsigned int i = 0; i < (*next).size(); i++)
+		{
+			if((*next).at(i) != bestmove)
+				delete (*next).at(i);
+			}
+		}
 		delete next;
 		return bestmove;
 	}
@@ -90,7 +96,7 @@ Node *Player::minimax(vector<Move*>* moves, Board* b, int depth, Side side, int 
 				best_move->score = score;
 			}
 			//std::cerr << "depth: " << depth << " (" << alpha << "," << beta << ")" << std::endl;
-			delete copy;
+			//delete copy;
 		}
 		return best_move;
 	}
