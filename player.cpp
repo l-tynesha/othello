@@ -59,6 +59,7 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
 
 Move *Player::minimax(vector<Move*>* moves, Board* b, int depth, Side side, int alpha, int beta)
 {
+	int sign = 1;	
 	if(depth == 1)
 	{
 		Move *bestmove = nullptr;
@@ -71,7 +72,11 @@ Move *Player::minimax(vector<Move*>* moves, Board* b, int depth, Side side, int 
 			if(!testingMinimax)
 			{
 				score += copy->advancedScore(m, copy, side, pl_side);
-				score += copy->getNumberOfLegalMoves(pl_side); 
+				if (side != pl_side)
+				{
+					sign = -1;
+				}				
+				score += copy->getNumberOfLegalMoves(side) * sign; 
 			}
 			if(bestmove == nullptr)
 			{
