@@ -51,7 +51,6 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
 		{
 			if((*next).at(i) != bestmove)
 				delete (*next).at(i);
-			}
 		}
 		delete next;
 		return bestmove;
