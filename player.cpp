@@ -34,7 +34,7 @@ Player::~Player() {
  */
 Move *Player::doMove(Move *opponentsMove, int msLeft) {
 	
-	int depth = 5;
+	int depth = 6;
 	if(testingMinimax)
 		depth = 2;
 	if(opponentsMove != nullptr)
@@ -122,7 +122,11 @@ Move *Player::minimax(vector<Move*>* moves, Board* b, int depth, Side side, int 
 			if(!testingMinimax)
 			{
 				score += copy->advancedScore(m, copy, side, pl_side);
-				score += copy->getNumberOfLegalMoves(pl_side); 
+				if (side != pl_side)
+				{
+					sign = -1;
+				}				
+				score += copy->getNumberOfLegalMoves(side) * sign; 
 			}
 			m->score = score;
 			delete next;
