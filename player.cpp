@@ -34,13 +34,13 @@ Player::~Player() {
  */
 Move *Player::doMove(Move *opponentsMove, int msLeft) {
 	
-	int depth = 5;
+	int depth = 6;
 	if(testingMinimax)
 		depth = 2;
 	if(opponentsMove != nullptr)
 		board->doMove(opponentsMove, op_side);
+		
 	vector<Move*>* next = board->getLegalMoves(pl_side); 
-	
 	if(next->size() > 0)
 	{
 		int alpha = -1000000;
@@ -75,9 +75,7 @@ Move *Player::minimax(vector<Move*>* moves, Board* b, int depth, Side side, int 
 			{
 				score += copy->advancedScore(m, copy, side, pl_side);
 				if (side != pl_side)
-				{
-					sign = -1;
-				}				
+					sign = -1;		
 				score += copy->getNumberOfLegalMoves(side) * sign; 
 			}
 			delete copy;
@@ -99,7 +97,6 @@ Move *Player::minimax(vector<Move*>* moves, Board* b, int depth, Side side, int 
 			}
 			//std::cerr << "depth: " << depth << " (" << alpha << "," << beta << ")" << std::endl;
 		}
-		
 		for(unsigned int i = 0; i < moves->size(); i++)
 		{
 			if(moves->at(i) != bestmove)
@@ -164,6 +161,7 @@ Move *Player::minimax(vector<Move*>* moves, Board* b, int depth, Side side, int 
 			break;
 		}
 	}
+	
 	for(unsigned int i = 0; i < moves->size(); i++)
 	{
 		if(moves->at(i) != bestmove)
