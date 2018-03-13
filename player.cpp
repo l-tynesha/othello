@@ -34,7 +34,7 @@ Player::~Player() {
  */
 Move *Player::doMove(Move *opponentsMove, int msLeft) {
 	
-	int depth = 8;
+	int depth = 7;
 	if(testingMinimax)
 		depth = 2;
 	if(opponentsMove != nullptr)
