@@ -10,7 +10,7 @@ class Player {
 private:
     Side op_side;
 	Side pl_side;
-	Node *minimax(vector<Move*>* moves, Board *b, int depth, Side pl_side, int alpha, int beta);
+	Move *minimax(vector<Move*>* moves, Board *b, int depth, Side pl_side, int alpha, int beta);
 	Side getOppositeSide(Side this_side);
 public:
     Player(Side side);  

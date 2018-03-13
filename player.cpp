@@ -44,7 +44,7 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
 	{
 		int alpha = -1000000;
 		int beta = 10000000;
-		Move *bestmove = minimax(next, board, depth, pl_side, alpha, beta)->move;
+		Move *bestmove = minimax(next, board, depth, pl_side, alpha, beta);
 		if(bestmove != nullptr)
 			board->doMove(bestmove, pl_side);
 		for(unsigned int i = 0; i < (*next).size(); i++)
@@ -63,11 +63,11 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
 }
 
 
-Node *Player::minimax(vector<Move*>* moves, Board* b, int depth, Side side, int alpha, int beta)
+Move *Player::minimax(vector<Move*>* moves, Board* b, int depth, Side side, int alpha, int beta)
 {
 	if(depth == 1)
 	{
-		Node* best_move = nullptr;
+		Move *bestmove = nullptr;
 		for(unsigned int i = 0; i < (*moves).size(); i++)
 		{
 			Move* m = (*moves).at(i);
@@ -79,27 +79,27 @@ Node *Player::minimax(vector<Move*>* moves, Board* b, int depth, Side side, int 
 				score += copy->advancedScore(m, copy, side, pl_side);
 				score += copy->getNumberOfLegalMoves(pl_side); 
 			}
-			if(best_move == nullptr)
+			if(bestmove == nullptr)
 			{
-				best_move = new Node(m);
-				best_move->score = score;
+				bestmove = m;
+				bestmove->score = score;
 			}
-			else if(side == op_side && score < best_move->score)
+			else if(side == op_side && score < bestmove->score)
 			{
-				best_move->move = m;
-				best_move->score = score;
+				bestmove = m;
+				bestmove->score = score;
 			}
-			else if(side == pl_side && score > best_move->score)
+			else if(side == pl_side && score > bestmove->score)
 			{
-				best_move->move = m;
-				best_move->score = score;
+				bestmove = m;
+				bestmove->score = score;
 			}
 			//std::cerr << "depth: " << depth << " (" << alpha << "," << beta << ")" << std::endl;
-			//delete copy;
+			delete copy;
 		}
-		return best_move;
+		return bestmove;
 	}
-	Node *best_move = nullptr;
+	Move *bestmove = nullptr;
 	for(unsigned int i = 0; i < (*moves).size(); i++)
 	{
 		Move* m = (*moves).at(i);
@@ -107,25 +107,25 @@ Node *Player::minimax(vector<Move*>* moves, Board* b, int depth, Side side, int 
 		copy->doMove(m, side);
 		vector<Move*>* next = copy->getLegalMoves(getOppositeSide(side)); 
 		if((*next).size() == 0)
-			return new Node(m);
-		Node *n = minimax(next, copy, depth - 1, getOppositeSide(side), alpha, beta);
+			return m;
+		Move *n = minimax(next, copy, depth - 1, getOppositeSide(side), alpha, beta);
 		int score = n->score;
 		if(!testingMinimax)
 			score += copy->advancedScore(m, copy, side, pl_side);
-		if(best_move == nullptr)
+		if(bestmove == nullptr)
 		{
-			best_move = new Node(m);
-			best_move->score = score;
+			bestmove = m;
+			bestmove->score = score;
 		}
-		else if(side == op_side && score < best_move->score)
+		else if(side == op_side && score < bestmove->score)
 		{
-			best_move->move = m;
-			best_move->score = score;
+			bestmove = m;
+			bestmove->score = score;
 		}
-		else if(side == pl_side && score > best_move->score)
+		else if(side == pl_side && score > bestmove->score)
 		{
-			best_move->move = m;
-			best_move->score = score;
+			bestmove = m;
+			bestmove->score = score;
 		}
 		//std::cerr << "depth: " << depth << " (" << alpha << "," << beta << ")" << std::endl;
 		if(side == pl_side && score > alpha)
@@ -137,7 +137,7 @@ Node *Player::minimax(vector<Move*>* moves, Board* b, int depth, Side side, int 
 			//std::cerr << "BREAK depth: " << depth << " (" << alpha << "," << beta << ")" << std::endl;
 			for(unsigned int i = 0; i < (*next).size(); i++)
 			{
-				if((*next).at(i) != best_move->move)
+				if((*next).at(i) != bestmove)
 					delete (*next).at(i);
 			}
 			delete next;
@@ -147,13 +147,13 @@ Node *Player::minimax(vector<Move*>* moves, Board* b, int depth, Side side, int 
 		
 		for(unsigned int i = 0; i < (*next).size(); i++)
 		{
-			if((*next).at(i) != best_move->move)
+			if((*next).at(i) != bestmove)
 				delete (*next).at(i);
 		}
 		delete next;
 		delete copy;
 	}
-	return best_move;
+	return bestmove;
 }
 
 /*

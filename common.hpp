@@ -10,7 +10,7 @@ enum Side {
 class Move {
    
 public:
-    int x, y;
+    int x, y, score;
     Move(int x, int y) {
         this->x = x;
         this->y = y;        
@@ -22,34 +22,6 @@ public:
 
     void setX(int x) { this->x = x; }
     void setY(int y) { this->y = y; }
-};
-
-class Node {
-public:
-	Move* move;
-	int score;
-	vector<Node*> next_moves;
-	Move* original_move;
-	Node()
-	{
-		original_move = nullptr;
-		move = nullptr;
-		score = 0;
-	}
-	Node(Move *m)
-	{
-		move = m;
-		original_move = nullptr;
-		score = 0;
-	}
-	void addNextMove(Node *next)
-	{
-		next_moves.push_back(next);
-	}
-	~Node()
-	{
-		delete move;
-	}
 };
 
 #endif
