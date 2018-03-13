@@ -119,7 +119,11 @@ Move *Player::minimax(vector<Move*>* moves, Board* b, int depth, Side side, int 
 			if(!testingMinimax)
 			{
 				score += copy->advancedScore(m, copy, side, pl_side);
-				score += copy->getNumberOfLegalMoves(pl_side); 
+				if (side != pl_side)
+				{
+					sign = -1;
+				}				
+				score += copy->getNumberOfLegalMoves(side) * sign; 
 			}
 			m->score = score;
 			delete next;
