@@ -310,6 +310,8 @@ vector<Move*>* Board::getLegalMoves(Side side)
 			Move* m = new Move(x, y);
 			if(checkMove(m, side))
 				legal_moves->push_back(m);
+			else
+				delete m;
 		}
 	}
     return legal_moves;
