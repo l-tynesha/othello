@@ -76,6 +76,7 @@ Move *Player::minimax(vector<Move*>* moves, Board* b, int depth, Side side, int 
 				score += copy->getNumberOfLegalMoves(pl_side); 
 			}
 			delete copy;
+			
 			if(bestmove == nullptr)
 			{
 				bestmove = m;
@@ -112,12 +113,21 @@ Move *Player::minimax(vector<Move*>* moves, Board* b, int depth, Side side, int 
 		vector<Move*>* next = copy->getLegalMoves(getOppositeSide(side)); 
 		if(next->size() == 0)
 		{
+			int score = copy->getScore(pl_side);		
+			if(!testingMinimax)
+			{
+				score += copy->advancedScore(m, copy, side, pl_side);
+				score += copy->getNumberOfLegalMoves(pl_side); 
+			}
+			m->score = score;
 			delete next;
 			return m;
 		}	
+		
 		Move *n = minimax(next, copy, depth - 1, getOppositeSide(side), alpha, beta);
 		int score = n->score;
 		delete n;
+		
 		if(!testingMinimax)
 			score += copy->advancedScore(m, copy, side, pl_side);
 		if(bestmove == nullptr)
