@@ -96,9 +96,8 @@ Move *Player::minimax(vector<Move*>* moves, Board* b, int depth, Side side, int 
 		
 		for(unsigned int i = 0; i < moves->size(); i++)
 		{
-			Move* m = moves->at(i);
-			if(m != bestmove)
-				delete m;
+			if(moves->at(i) != bestmove)
+				delete moves->at(i);
 		}
 		delete moves;
 		return bestmove;
@@ -118,6 +117,7 @@ Move *Player::minimax(vector<Move*>* moves, Board* b, int depth, Side side, int 
 		}	
 		Move *n = minimax(next, copy, depth - 1, getOppositeSide(side), alpha, beta);
 		int score = n->score;
+		delete n;
 		if(!testingMinimax)
 			score += copy->advancedScore(m, copy, side, pl_side);
 		if(bestmove == nullptr)
@@ -151,9 +151,8 @@ Move *Player::minimax(vector<Move*>* moves, Board* b, int depth, Side side, int 
 	}
 	for(unsigned int i = 0; i < moves->size(); i++)
 	{
-		Move* m = moves->at(i);
-		if(m != bestmove)
-			delete m;
+		if(moves->at(i) != bestmove)
+			delete moves->at(i);
 	}
 	delete moves;
 	return bestmove;
