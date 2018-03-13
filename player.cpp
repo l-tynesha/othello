@@ -47,12 +47,6 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
 		Move *bestmove = minimax(next, board, depth, pl_side, alpha, beta);
 		if(bestmove != nullptr)
 			board->doMove(bestmove, pl_side);
-		for(unsigned int i = 0; i < (*next).size(); i++)
-		{
-			if((*next).at(i) != bestmove)
-				delete (*next).at(i);
-		}
-		delete next;
 		return bestmove;
 	}
 	else
@@ -97,8 +91,17 @@ Move *Player::minimax(vector<Move*>* moves, Board* b, int depth, Side side, int 
 			//std::cerr << "depth: " << depth << " (" << alpha << "," << beta << ")" << std::endl;
 			delete copy;
 		}
+		
+		for(unsigned int i = 0; i < (*moves).size(); i++)
+		{
+			Move* m = (*moves).at(i);
+			if(m != bestmove)
+				delete m;
+		}
+		delete moves;
 		return bestmove;
 	}
+	
 	Move *bestmove = nullptr;
 	for(unsigned int i = 0; i < (*moves).size(); i++)
 	{
@@ -132,27 +135,21 @@ Move *Player::minimax(vector<Move*>* moves, Board* b, int depth, Side side, int 
 			alpha = score;
 		else if(side == op_side && score < beta)
 			beta = score;
+		
+		delete copy;
 		if(beta <= alpha)
 		{
 			//std::cerr << "BREAK depth: " << depth << " (" << alpha << "," << beta << ")" << std::endl;
-			for(unsigned int i = 0; i < (*next).size(); i++)
-			{
-				if((*next).at(i) != bestmove)
-					delete (*next).at(i);
-			}
-			delete next;
-			delete copy;
 			break;
 		}
-		
-		for(unsigned int i = 0; i < (*next).size(); i++)
-		{
-			if((*next).at(i) != bestmove)
-				delete (*next).at(i);
-		}
-		delete next;
-		delete copy;
 	}
+	for(unsigned int i = 0; i < (*moves).size(); i++)
+	{
+		Move* m = (*moves).at(i);
+		if(m != bestmove)
+			delete m;
+	}
+	delete moves;
 	return bestmove;
 }
 
@@ -162,11 +159,7 @@ Move *Player::minimax(vector<Move*>* moves, Board* b, int depth, Side side, int 
 Side Player::getOppositeSide(Side this_side)
 {
     if (this_side == BLACK)
-    {
          return WHITE;
-    }
     else
-    {
          return BLACK;
-    }
 }
